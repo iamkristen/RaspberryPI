@@ -1,6 +1,10 @@
 import random
 import RPi.GPIO as gpio
 import time 
+from colorama import Fore, init
+
+
+init()
 
 gpio.setmode(gpio.BOARD)
 gpio.setup(3,gpio.OUT)
@@ -51,26 +55,28 @@ def update_clue(guessed_letter,secret_word,clue):
         index = index + 1
 
 while lives > 0:
-    print(clue)
+    print( Fore.YELLOW,clue)
     if clue == list(secret_word):
         guessed_word_correctly = True
         break
-    print("your lives: "+heart * lives)
-    guess = input("Enter a letter or whole word: ")
+    print(Fore.GREEN,"your lives: ",end="")
+    print(Fore.RED,heart * lives)
+    print(Fore.WHITE,"Enter a letter or whole word: ",end="")
+    guess = input()
 
     if guess in secret_word:
-        print("letter found..")
+        print(Fore.GREEN,"letter found..\n\n")
         update_clue(guess,secret_word,clue)
         greenlight()
     else:
-        print("incorrect guess. you lose a life")
+        print(Fore.RED,"incorrect guess. you lose a life\n\n")
         lives = lives -1
         redlight()
 
 if guessed_word_correctly:
-    print("you win.The secret word is [%s]"%secret_word)
+    print(Fore.GREEN,"you win.The secret word is [%s]"%secret_word)
     buzzer()
 else:
-    print("you lose.The secret word is [%s]"%secret_word)
+    print(Fore.RED,"you lose.The secret word is [%s]"%secret_word)
     buzzer()
 
